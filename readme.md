@@ -67,7 +67,26 @@ public class BooksDbContext : DbContext
     {
     }
 }
+-----------------------------------------------------------------------------------------------------
+
+daha sonra contextın altında DBModal klasoru actım
+    Books.cs dosyasını ekledım
+
+    public class Book
+    {
+        //  VERİ TABLOSU OLUŞTURMAK İÇİN, SÜTUNLARI BELİRTMEMİZ GEREKİYOR
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Price { get; set; }
+        public int Stock { get; set; }
+}
+
+BooksContexte gidip 
+    book isimli sınıfı tablo olarak şekilde verelim!!
+            public DbSet<Book> Books { get; set; }
 ```
+-----------------------------------------------------------------------------------------------------
+
 
 ### Migration'ın yüklenmesi için:
 
@@ -101,18 +120,3 @@ Veri tabanını terminal ekranından oluşturmak için 3 komut girmeye ihtiyacı
 
 -------------------------------------------------------------------------------------
 
-daha sonra contextın altında DBModal klasoru actım
-    Books.cs dosyasını ekledım
-
-    public class Book
-    {
-        //  VERİ TABLOSU OLUŞTURMAK İÇİN, SÜTUNLARI BELİRTMEMİZ GEREKİYOR
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int Price { get; set; }
-        public int Stock { get; set; }
-}
-
-BooksContexte gidip 
-    book isimli sınıfı tablo olarak şekilde verelim!!
-            public DbSet<Book> Books { get; set; }
