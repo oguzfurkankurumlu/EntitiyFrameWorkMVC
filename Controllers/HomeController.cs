@@ -61,7 +61,7 @@ public class HomeController : Controller
         // SaveChange yapılan değişikliklerin(insert,update,delete) veri tabanına yansımasını sağlar!!.
 
         // oluşturduğumuz yeni kayıtları veri tabanına aktaralım!!
-        //_context.SaveChanges();
+        _context.SaveChanges();
 
         return View();
     }

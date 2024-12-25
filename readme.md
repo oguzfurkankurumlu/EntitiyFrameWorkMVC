@@ -86,12 +86,35 @@ BooksContexte gidip
             public DbSet<Book> Books { get; set; }
 ```
 -----------------------------------------------------------------------------------------------------
+# veri tabanı ayarlarını yapalım!!
+## 1. Program.cs Dosyasına Kod Eklemek
 
+### BookStore Veritabanı İçin LOCAL VE MOSTIRDB
+
+```csharp
+builder.Services.AddDbContext<BooksDbContext>(options =>
+    options.UseSqlServer("Server=localhost; Database=DenemeBook; Trusted_Connection=True; Encrypt=True; TrustServerCertificate=True; MultipleActiveResultSets=True;")
+);
+
+```csharp
+builder.Services.AddDbContext<BooksDbContext>(options=>
+options.UseSqlServer("Server=db11335.public.databaseasp.net; Database=BooksDbContext; User Id=db11335; Password=o=4N8tE?L2+h; Encrypt=True; TrustServerCertificate=True; MultipleActiveResultSets=True;"));
+
+
+ Database=BookStore, olusturmak ıstedıgım databasın adıdır.
+ 
+
+ monster apden gelen veri sunucusuna baglantı 
+ ```csharp
+    Server=db11335.public.databaseasp.net; Database=db11335; User Id=db11335; Password=o=4N8tE?L2+h; Encrypt=True; TrustServerCertificate=True; MultipleActiveResultSets=True;
+
+
+-----------------------------------------------------------------------------------------------------
 
 ### Migration'ın yüklenmesi için:
 
 ```bash
-dotnet tool install --global dotnet-ef --version 9.*
+dotnet tool install --global dotnet-ef 
 ```
 
 ### Migration oluşturmak için kullanılır (Migration: Kod tarafında yazılan kodları veri tabanına göndermek için hazırlayan bir yapıdır):
@@ -108,7 +131,7 @@ dotnet ef database update
 
 Veri tabanını terminal ekranından oluşturmak için 3 komut girmeye ihtiyacımız var bunlar
 
-    dotnet tool install --global dotnet-ef --version 9.*
+    dotnet tool install --global dotnet-ef 
 
      Migration oluşturmak için kullanılır!! (Migration : kod tarafında yazılan kodları veri tabanına göndermek için hazırlayan bir yapıdır!!)
      dotnet ef migrations add InitialCreate  
@@ -117,6 +140,82 @@ Veri tabanını terminal ekranından oluşturmak için 3 komut girmeye ihtiyacı
      kod tarafındaki eklenen veri tabanı ve tablonun veri tabanına işlenmesi için 
      dotnet ef database update komutunu çalıştırmanız gerekmektedir!!.
 
-
 -------------------------------------------------------------------------------------
 
+HOMECTROLLERA GIDILIR
+
+        public class HomeController : Controller
+        {
+        public BooksDbContext _context;
+        public HomeController(BooksDbContext context)
+        {
+            _context = context;
+        }
+
+
+PUBLİC ıACTION INDEXIN ICINE
+
+        _context.Books.Add(new Book() { Name = "Book1", Price = 1, Stock = 10 });
+        _context.Books.Add(new Book() { Name = "Book2", Price = 1, Stock = 10 });
+        _context.Books.Add(new Book() { Name = "Book3", Price = 1, Stock = 10 });
+        _context.Books.Add(new Book() { Name = "Book4", Price = 1, Stock = 10 });
+        _context.Books.Add(new Book() { Name = "Book5", Price = 1, Stock = 10 });
+        _context.Books.Add(new Book() { Name = "Book6", Price = 1, Stock = 10 });
+        _context.Books.Add(new Book() { Name = "Book7", Price = 1, Stock = 10 });   
+
+YAZILIR VE VERİ TABANI İÇİ TABLOLAR OLUSTURULUR.
+
+oluşturduğumuz yeni kayıtları veri tabanına aktaralım!!
+    _context.SaveChanges();
+
+context üzeirnden books tablosuna veri ekledik!!
+
+eklenen verilerin veri tabanına gitmesi içinm, _context.savechange() metodunu çağırdık!!
+
+SaveChange yapılan değişikliklerin(insert,update,delete) veri tabanına yansımasını sağlar!!.
+-------------------------------------------------------------------------------------
+
+BooksController olsuturup orada verileri çekme işlemiyaptım 
+
+
+dependecy inejctıon ekledım 
+
+    public BooksDbContext _context;
+    public BooksController(BooksDbContext context)
+    {
+        _context = context;
+    }
+
+verileri aldık
+
+    public IActionResult GetBooksWithDatabase()
+        {
+
+        // veri tabanından books tablosundaki verileri çektik!!
+        List<Book> books = _context.Books.ToList();
+
+        return View();
+        }
+
+
+İSTEDİGİMİZ VERİLERİ VERİ TABANINDAN ALDIK. 
+public IActionResult GetBookNames()
+    {
+
+        // veri tabanından books tablosundaki verileri çektik!!
+        // ÖNEMLİ NOT : Entity Frameworkte ihtiyacınız olan kadar veriyi çekmeniz entity framework performasnını artıracaktır
+
+        List<BooksViewModel> books = _context.Books.Select(s => new BooksViewModel()
+        {
+            Id = s.Id,
+            Name = s.Name,
+
+        }).ToList();
+
+        return View();
+    }
+
+    sorguları tolist den once vermen lazım yoksa veriler  tamamne cekıldıkten sonra sorgulara donmeye gıdıcek. tüm veri tabanını alı yanı tolistten once yazmazsan
+    
+
+BOOKSVIEWMODEL EKLEDIK BITANE

@@ -1,7 +1,17 @@
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// veri tabanı ayarlarını yapalım!!
+builder.Services.AddDbContext<BooksDbContext>(options =>
+    options.UseSqlServer("Server=localhost; Database=DenemeBook; Trusted_Connection=True; Encrypt=True; TrustServerCertificate=True; MultipleActiveResultSets=True;")
+);
+
+
+
 
 var app = builder.Build();
 
