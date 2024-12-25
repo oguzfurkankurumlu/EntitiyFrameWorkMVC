@@ -218,4 +218,14 @@ public IActionResult GetBookNames()
     sorguları tolist den once vermen lazım yoksa veriler  tamamne cekıldıkten sonra sorgulara donmeye gıdıcek. tüm veri tabanını alı yanı tolistten once yazmazsan
     
 
-BOOKSVIEWMODEL EKLEDIK BITANE
+BOOKSVIEWMODEL EKLEDIK BITANE;
+
+database ıcındekı tablolalara dmo datamodelobject denir, book.cs dmo oluyor burda.
+sadece veri tabanını olustururken kullanılır. SQL tablomuz olur yani.
+view a gelmemesı lazım, controllarada gelmemsi lazım hıcbır sekılde, erişilmez olması lazım. database tablosu cunku, verileri ıcınde tutar
+
+viewmmodel olarak kullanırsam ıcıne bır deger atıp savechanges yaparsam veri tabanı bozulur. bu yuzden erişilmemesi lazım
+
+book datamodelobject dmo olması lazım bu yuzden
+
+    public DbSet<Book> Books {get;set} ksımında anadı database oldugunu
